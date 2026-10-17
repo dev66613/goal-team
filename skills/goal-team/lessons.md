@@ -32,6 +32,13 @@ Promote new lessons with `goalctl lesson "<text>"` only AFTER independent verifi
   shares a file with the real "a_b", mixing two sessions' state) and raw ids in lock paths
   break ("a/b" → `locks/a/b.lock` → ENOENT). Use
   `safeKey(s).slice(0, 32) + "-" + sha1(s).slice(0, 8)` for every id-derived path.
+- npm CLI shims (`backlog.ps1`/`backlog.cmd`) cannot be spawned directly — CreateProcess
+  rejects script shims. On win32 resolve via `cmd.exe /d /c <tool>.cmd`; verify with the
+  tool's own `--version` before trusting the integration.
+- PowerShell `& ([scriptblock]::Create($cmd))` piped to a native exe never closes its
+  stdin (the child hangs). To replay a configured hook command, extract the exact
+  executable+args and drive them via `Bun.spawn` with `stdin: "pipe"` — the same paths,
+  without the shell quirk.
 
 ## Process lessons (1.1.23 fixing session)
 
