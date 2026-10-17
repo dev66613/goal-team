@@ -16,9 +16,15 @@ bun scripts/install.mjs
 ```
 
 - Copies the runtime to `<COPILOT_HOME>/goal-team/` (default `~/.copilot/goal-team`).
-- Registers hook entries in `<COPILOT_HOME>/settings.json` with **absolute** `bun`
-  commands (never `$HOME`, never bare `bash` — the WSL-bash trap).
-- Migrates away `mcpServers.goalSystem` from `mcp-config.json` (copilot-goal-system → goal-team).
+- Registers `<COPILOT_HOME>/hooks/goal-team.json` in the **verified** Copilot hook-file
+  schema (`command`/`bash`/`powershell` + `timeoutSec`, absolute paths — never `$HOME`,
+  never bare `bash`, PowerShell vocabulary for Windows). One file is discovered by
+  Copilot CLI **and** the VS Code / VS Code Insiders Copilot harness.
+- Installs skills into `<COPILOT_HOME>/skills/` (`goal-team`, `backlog-md`) — the
+  built-in user-scope skill location for Chat and CLI.
+- Migrates away `mcpServers.goalSystem`, legacy `goal-context.sh` / `goal-system-vscode.json`
+  hook files, inline goal hook entries in `settings.json`, and the verified legacy
+  `skills/goal` (identity-checked before removal).
 - Idempotent: safe to re-run; never marks files read-only.
 
 If the old **copilot-goal-system** VS Code extension is installed, uninstall it manually
@@ -84,11 +90,22 @@ goalctl checkpoint --id <id> [--done ...] [--evidence ...] [--verify ...] [--iss
 goalctl finish --id <id> --done ... --evidence ... --proof ... --verify ... --audit ...
 goalctl close --id <id> --status cancelled
 goalctl lesson "<verified lesson>"
+goalctl backlog status                                   # backlog CLI availability/root
+goalctl backlog export --id <id> --title "<N.M>" --ac "<c>" [--label ...] [--dry-run]
+goalctl backlog sync --task TASK-N --status "<status>"   [--dry-run]
 goalctl doctor
 ```
 
 State lives in `~/.goal-team/state/` (override with `GOAL_TEAM_HOME`); per-goal
 git-auditable artifacts in `.goals/<id>/` (PRD, plan, research notes).
+
+## backlog.md (CLI automation — no MCP)
+
+Backlog.md integrates through the `backlog` CLI only (this plugin never uses
+`backlog mcp`). The `backlog-md` skill carries the workflow; `goalctl backlog`
+is the automation surface used by the loop's phase 4 (План) and records the
+returned `TASK-N` ids into goal state. If the CLI is missing, exports are
+skipped with a note — the loop never blocks on the tracker.
 
 ## Config
 
@@ -112,6 +129,6 @@ bun scripts/e2e-sweep.mjs   # lifecycle payload sweep (10 events)
 
 | From | What happens |
 |---|---|
-| copilot-goal-system | `mcpServers.goalSystem` removed by the installer; hooks replaced by the bun hook; extension can be uninstalled |
+| copilot-goal-system | installer removes `mcpServers.goalSystem`, `goal-context.sh` / `goal-system-vscode.json*` hook files, inline goal hooks in `settings.json`, `extensions/goal-system/`, and the identity-verified legacy `skills/goal`; VS Code extension `gabrimatic.copilot-goal-system` must be uninstalled manually (`code --uninstall-extension gabrimatic.copilot-goal-system`) |
 | gsemet/copilot-goal-skill | goal workflow absorbed (immutability, Builder/Inspector, `[B]` commit markers) — remove the old skill folder |
 | gem-team / agent-team | agent roster and wave orchestration adapted — `apm install` of gem-team can be removed |

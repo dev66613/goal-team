@@ -35,12 +35,14 @@ All state goes through `goalctl` (never edit goal JSON files directly).
    (scope change = new revision).
 4. **План (Plan)** — staged plan in `.goals/<id>/plan.md`: **Этапы N with подэтапы N.M**,
    each substage has AC, estimate and dependencies (MoSCoW). Waves = substages with no
-   inter-dependencies. **Backlog.md (optional):** if the `backlog` CLI is available,
-   export each substage — `backlog task create "<N.M title>" -d "<AC, estimate, deps>" --ac "<criterion>"` —
-   store the returned task id in plan.md and sync status with
-   `backlog task edit <id> -s <status>` (statuses come from the backlog config). If the
-   CLI is absent, skip with a note (graceful degradation). Dispatch `goal-reviewer`
-   (mode: plan) to challenge the DAG before executing.
+   inter-dependencies. **Backlog.md (optional, CLI automation — never MCP):** first
+   `goalctl backlog status`; when the `backlog` CLI is available, export each substage —
+   `goalctl backlog export --id <goalId> --title "<N.M title>" --ac "<criterion>" --label goal-team`
+   (wraps `backlog task create "<N.M title>" -d --ac`) — store the returned `TASK-N` in
+   plan.md and sync status with `goalctl backlog sync --task TASK-N --status <status>`
+   (wraps `backlog task edit`; statuses come from the backlog config — see the
+   `backlog-md` skill). If the CLI is absent, skip with a note (graceful degradation).
+   Dispatch `goal-reviewer` (mode: plan) to challenge the DAG before executing.
 5. **Выполнение (Execute)** — dispatch `goal-builder` subagents **one per substage, up to 3
    concurrently per wave** (file/partition ownership — never two writers on one file).
    Each builder gets: goal, PRD, its substage, relevant context, and MUST run tests before

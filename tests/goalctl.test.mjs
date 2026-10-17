@@ -72,3 +72,32 @@ test("checkpoint with unknown id exits 1 with a clean error", async () => {
   const { code } = await ctl("checkpoint", "--id", "nope", "--next", "x");
   expect(code).not.toBe(0);
 });
+
+test("backlog status resolves the CLI and reports availability", async () => {
+  const { code, out } = await ctl("backlog", "status");
+  expect(code).toBe(0);
+  const j = JSON.parse(out);
+  expect(typeof j.available).toBe("boolean");
+  expect(j.available).toBe(true); // backlog is installed on this machine (npm shim via cmd.exe)
+  expect(j.version).toMatch(/^\d+\./); // backlog --version prints the bare version (e.g. "1.54.0")
+});
+
+test("backlog export --dry-run prints the exact command with AC flags", async () => {
+  const { out: o } = await ctl("open", "--session", "s1", "--cwd", "/w/p", "--objective", "x");
+  const id = JSON.parse(o).id;
+  const { code, out } = await ctl("backlog", "export", "--id", id, "--title", "4.2 demo", "--ac", "criterion one", "--label", "goal-team", "--dry-run");
+  expect(code).toBe(0);
+  const j = JSON.parse(out);
+  expect(j.dryRun).toBe(true);
+  expect(j.command).toContain("task create 4.2 demo");
+  expect(j.command).toContain("--ac criterion one");
+  expect(j.command).toContain("-l goal-team");
+});
+
+test("backlog sync --dry-run prints the status edit command", async () => {
+  const { code, out } = await ctl("backlog", "sync", "--task", "TASK-9", "--status", "In Progress", "--dry-run");
+  expect(code).toBe(0);
+  const j = JSON.parse(out);
+  expect(j.dryRun).toBe(true);
+  expect(j.command).toContain("task edit TASK-9 -s In Progress");
+});
