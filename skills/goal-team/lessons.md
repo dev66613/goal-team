@@ -39,6 +39,11 @@ Promote new lessons with `goalctl lesson "<text>"` only AFTER independent verifi
   stdin (the child hangs). To replay a configured hook command, extract the exact
   executable+args and drive them via `Bun.spawn` with `stdin: "pipe"` — the same paths,
   without the shell quirk.
+- After a migration deletes hook files, LONG-LIVED hosts keep firing the stale hook list
+  discovered at their session start (MODULE_NOT_FOUND until they reload). Expected and
+  transient — verify current state in the host's own hook log (`GitHub Copilot Chat
+  Hooks.log` shows `Running:` lines) and tell the user to restart open chat sessions.
+  Never conclude "removal failed" from a stale-session error alone.
 
 ## Process lessons (1.1.23 fixing session)
 

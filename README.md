@@ -26,6 +26,11 @@ bun scripts/install.mjs
   hook files, inline goal hook entries in `settings.json`, and the verified legacy
   `skills/goal` (identity-checked before removal).
 - Idempotent: safe to re-run; never marks files read-only.
+- **After migrating, restart any open Copilot chat sessions** — long-lived hosts keep
+  executing the hook list discovered at their session start, so a deleted legacy hook
+  can raise a transient `MODULE_NOT_FOUND` until the session reloads. The error from a
+  pre-migration session is not a sign of a leftover config; check the host's hook log
+  (`GitHub Copilot Chat Hooks.log` → `Running:` lines) for the current state.
 
 If the old **copilot-goal-system** VS Code extension is installed, uninstall it manually
 (`code --uninstall-extension gabrimatic.copilot-goal-system`) — its functionality lives here now.
