@@ -62,3 +62,13 @@ test("doctor reports bun and store health", async () => {
   expect(code).toBe(0);
   expect(out).toContain("bun");
 });
+
+test("unknown command exits 2 with usage", async () => {
+  const { code } = await ctl("frobnicate");
+  expect(code).toBe(2);
+});
+
+test("checkpoint with unknown id exits 1 with a clean error", async () => {
+  const { code } = await ctl("checkpoint", "--id", "nope", "--next", "x");
+  expect(code).not.toBe(0);
+});

@@ -52,3 +52,16 @@ test("subagentStart receives boundary only, never goal state", async () => {
   expect(ctx).toContain("main-session only");
   expect(ctx).not.toContain("make tests green");
 });
+
+test("empty stdin exits 0 (fail-open)", async () => {
+  const proc = Bun.spawn(["bun", "hooks/goal-hook.mjs"], { env, stdin: "pipe", stdout: "pipe" });
+  proc.stdin.end();
+  expect(await proc.exited).toBe(0);
+});
+
+test("unknown event with an active goal returns context without crashing", async () => {
+  await runHook({ hook_event_name: "UserPromptSubmitted", session_id: "s1", cwd: "/w/p", prompt: "/goal x" });
+  const { code, out } = await runHook({ hook_event_name: "SomethingNew", session_id: "s1", cwd: "/w/p" });
+  expect(code).toBe(0);
+  expect(JSON.parse(out).additionalContext).toContain("Active goal");
+});

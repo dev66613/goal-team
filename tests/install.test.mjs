@@ -1,7 +1,7 @@
 import { test, expect } from "bun:test";
 import { tempHome } from "./helpers/env.cjs";
 import path from "node:path";
-import { readFileSync, existsSync, statSync } from "node:fs";
+import { readFileSync, existsSync, statSync, writeFileSync, mkdirSync } from "node:fs";
 
 async function runInstall(env) {
   const proc = Bun.spawn(["bun", "scripts/install.mjs"], {
@@ -39,4 +39,22 @@ test("install is idempotent and never marks files read-only", async () => {
   expect(st.mode & 0o200).toBeTruthy(); // writable bit survives on POSIX; on Windows mode is always 0o666
   expect(existsSync(path.join(copilot, "goal-team", "hooks", "goal-hook.mjs"))).toBe(true);
   expect(existsSync(path.join(copilot, "goal-team", "skills", "goal-team", "SKILL.md"))).toBe(true);
+});
+
+test("install keeps pre-existing user hook entries and settings keys", async () => {
+  const home = tempHome("goal-team-install3");
+  const copilot = path.join(home, ".copilot");
+  mkdirSync(copilot, { recursive: true });
+  writeFileSync(path.join(copilot, "settings.json"), JSON.stringify({
+    someSetting: true,
+    hooks: { version: 1, hooks: { preToolUse: [{ type: "command", command: "user-tool", timeoutSec: 3 }] } },
+  }));
+  const env = { ...process.env, GOAL_TEAM_HOME: home, HOME: home, USERPROFILE: home, COPILOT_HOME: copilot };
+  expect(await runInstall(env)).toBe(0);
+  const s = JSON.parse(readFileSync(path.join(copilot, "settings.json"), "utf8"));
+  expect(s.someSetting).toBe(true);
+  const pre = s.hooks.hooks.preToolUse;
+  expect(pre.length).toBe(2);
+  expect(pre[0].command).toBe("user-tool");
+  expect(pre[1].command).toContain("goal-hook.mjs");
 });
