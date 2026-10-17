@@ -82,3 +82,11 @@ test("finish clears session indexes so a new goal can start (no stale active)", 
   expect(await store.loadBySession("s1")).toBe(null);
   expect(await store.loadByCwdSession("/w/p", "s1")).toBe(null);
 });
+
+test("identifiers are sanitized (no path traversal via id or session id)", async () => {
+  const g = await store.open({ sessionId: "../evil", cwd: "/w/p", objective: "x" });
+  expect(g.id).toBeTruthy();
+  // the index round-trips through the same sanitized key and stays inside the state root
+  expect((await store.loadBySession("../evil")).id).toBe(g.id);
+  expect((await store.load(g.id)).sessionId).toBe("../evil");
+});

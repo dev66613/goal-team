@@ -46,8 +46,11 @@ try {
     }
     case "close":
       json(await store.close(flag("id"), { status: flag("status") || "cancelled" })); break;
-    case "lesson":
-      await store.lesson(argv.slice(1).join(" ")); console.log("lesson recorded"); break;
+    case "lesson": {
+      const text = argv.slice(1).join(" ").trim();
+      if (!text) { console.error("[goalctl] Failed to record lesson: empty text"); process.exit(2); }
+      await store.lesson(text); console.log("lesson recorded"); break;
+    }
     case "doctor": {
       console.log(`bun ${Bun.version} ok`);
       console.log(`store ${store.root} ok`);

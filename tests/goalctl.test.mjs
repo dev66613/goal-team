@@ -52,6 +52,11 @@ test("lesson appends to lessons.md", async () => {
   expect(text).toContain("failing path");
 });
 
+test("lesson without text is refused", async () => {
+  const { code } = await ctl("lesson");
+  expect(code).not.toBe(0);
+});
+
 test("doctor reports bun and store health", async () => {
   const { code, out } = await ctl("doctor");
   expect(code).toBe(0);
