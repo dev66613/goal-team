@@ -28,6 +28,10 @@ Promote new lessons with `goalctl lesson "<text>"` only AFTER independent verifi
 - Text files created on Windows get CRLF; regexes anchored on `\n` must tolerate `\r?\n`.
 - Never chain `git commit` after a test run with `;` in one shell line — gate the commit on
   green (`if ($LASTEXITCODE -eq 0) {...}`). A chained commit once shipped a failing state.
+- Id-derived file names need a DIGEST suffix: sanitize-only keys collide ("a/b" → "a_b"
+  shares a file with the real "a_b", mixing two sessions' state) and raw ids in lock paths
+  break ("a/b" → `locks/a/b.lock` → ENOENT). Use
+  `safeKey(s).slice(0, 32) + "-" + sha1(s).slice(0, 8)` for every id-derived path.
 
 ## Process lessons (1.1.23 fixing session)
 
