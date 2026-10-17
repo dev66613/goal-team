@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "userPromptSubmitted": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "preCompact": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "agentStop": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "subagentStart": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "subagentStop": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "preToolUse": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "postToolUse": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "timeoutSec": 5 }],
+    "notification": [{ "type": "command", "bun": "hooks/goal-hook.mjs", "matcher": "agent_idle|agent_completed", "timeoutSec": 5 }]
+  }
+}
