@@ -1,0 +1,4 @@
+# goal-team/.gitignore
+node_modules/
+*.log
+.check/

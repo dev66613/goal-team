@@ -1,0 +1,8 @@
+{
+  "name": "goal-team",
+  "version": "0.1.0",
+  "description": "Goal-driven multi-agent orchestration with parallel waves, independent verification, and lessons.",
+  "skills": "skills/",
+  "hooks": "hooks.json",
+  "agents": "agents/"
+}

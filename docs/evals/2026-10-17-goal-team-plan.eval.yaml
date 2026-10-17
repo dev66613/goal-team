@@ -1,0 +1,88 @@
+eval_id: "eval-2026-10-17T-goal-team-plan"
+target_type: plan
+target: "goal-team/docs/plans/2026-10-17-goal-team-plugin.md"
+target_summary: "Implementation plan v2 for the merged goal-team plugin (Tasks 0-7, US-1..US-6)"
+
+rubric:
+  - dimension: "Coverage"
+    weight: 1.0
+    description: "Plan addresses every requirement: original scope + 4 amendments + every US acceptance criterion"
+  - dimension: "Atomicity"
+    weight: 1.0
+    description: "Every task/step is a 3-30 min testable unit; substages map 1:1 to commits"
+  - dimension: "Parallelism"
+    weight: 1.0
+    description: "Waves optimized for parallel execution; blocked work never stalls independent work"
+  - dimension: "Contracts"
+    weight: 1.0
+    description: "Inter-task and orchestrator<->subagent interfaces fully specified incl. failure policy"
+  - dimension: "Risks"
+    weight: 1.0
+    description: "Risks identified with concrete mitigations"
+  - dimension: "Autonomy"
+    weight: 1.0
+    description: "Self-recovery, self-continuation, resumability, minimal human gates (user-mandated dimension)"
+
+iterations:
+  - pass: 1
+    scores:
+      coverage: 3
+      atomicity: 2
+      parallelism: 3
+      contracts: 2
+      risks: 2
+      autonomy: 2
+    mean_score: 2.33
+    evidence:
+      coverage: "US-1..US-6 with Given/When/Then AC mapped to Tasks (plan lines 21-95); all 4 amendments present. Gap: US-3 AC demanded blocking PRD approval - contradicted the autonomy requirement."
+      atomicity: "TDD steps exist, but Task 1 Step 3 is ~120 lines and Task 4 Steps 3-4 write 13 files in 2 steps; no 3-30 min rule."
+      parallelism: "DAG waves, 2-4 in research/review, <=3 builders with file partitioning. Gap: no 'blocked branch does not stall the wave' rule; Task 4 and Task 5 are independent inside Wave 2."
+      contracts: "Agent JSON schemas, hook stdin/stdout, goalctl CLI present. Gap: no orchestrator->subagent dispatch payload schema, no timeout/failure policy, no fix-claiming contract."
+      risks: "2 risks with mitigations (hook schema fallback; backlog status vocabulary). Gap: bun missing, no subagent harness, hung subagent, session interruption, second /goal in one session."
+      autonomy: "Stop gate decision:block with continuation (self-continuation), fail-open hook, inspector+lessons. Gap: 'after 5 failed iterations ask the user' hard stop with no recovery ladder; PRD always needs approval; no resume contract; no degradation path."
+    logic_bugs_found:
+      - "Task 2 drift counter never increments ((active.history||[]).length is always 0 because checkpoint ignores 'history') - the plan's own drift test could never pass."
+      - "GoalStore.open() is not idempotent per session: a second /goal overwrites the session index and orphans the first goal."
+      - "GoalStore.finish() leaves index records behind: a completed goal would make the hook block a fresh goal in the same session."
+    improvements_applied:
+      - "US-3 AC rewritten: PRD auto-locks per autonomy level (coverage 3->4)"
+      - "Real drift counter: bumpDrift() per tool call, checkpoint resets (fixes logic bug; drift test now passes)"
+      - "open() idempotent per session; finish/close clear both indexes (fixes stale-index orphan)"
+      - "Atomicity rule: Step = 3-30 min TDD unit = one commit; substage<->commit mapping (atomicity 2->3)"
+      - "Switch-lane rule for blocked branches + Task 4||5 parallel note in Wave 2 (parallelism 3->4)"
+      - "Subagent dispatch contract: request/response schemas, timeout + one retry + lane switch, fix-claiming by file prefix (contracts 2->4)"
+      - "5 new risks with mitigations: bun missing, no harness, hang/malformed response, interruption, double /goal (risks 2->3)"
+      - "Autonomy & recovery section: levels full/standard/supervised, self-continuation contract, 6-rung recovery ladder, resume contract, degradation (autonomy 2->4)"
+  - pass: 2
+    scores:
+      coverage: 4
+      atomicity: 3
+      parallelism: 4
+      contracts: 4
+      risks: 3
+      autonomy: 4
+    mean_score: 3.67
+    evidence:
+      coverage: "All 4 amendments + every US AC traceable to tasks; US-3 now consistent with autonomy levels."
+      atomicity: "Atomicity rule stated (plan line ~93); steps remain slightly coarse at Task level - not split further to keep the plan readable."
+      parallelism: "Wave 2 marked Task 4 || Task 5; switch-lane rung keeps independent work running."
+      contracts: "Dispatch contract section added (plan '## Subagent dispatch contract'); store/hook/goalctl contracts already in Tasks 1-3; failure policy explicit."
+      risks: "7 risks with concrete mitigations; hook-schema risk stays open by nature (fallback specified)."
+      autonomy: "'## Autonomy & recovery': 3 autonomy levels, self-continuation via Stop gate, 6-rung recovery ladder (escalate only after 3 distinct strategies), resume via checkpoint --next, serial degradation with honesty caveat."
+    improvements_applied: []
+
+final:
+  mean_score: 3.67
+  lowest_dimension: atomicity (3)
+  verdict: return
+  remaining_gaps:
+    - "Hook schema 'bun' field is unverified against the Copilot CLI binary (risk + documented fallback; validate in Task 2 acceptance)."
+    - "Task-level steps are still coarse (30-90 min); acceptable because Steps are the atomic TDD units."
+    - "Backlog status vocabulary is dynamic per configuration (mitigation: discover via backlog board)."
+  caveats: []
+
+extra:
+  iterations_used: 2
+  iterations_budget: 3
+  confidence: 0.85
+  user_visible: true

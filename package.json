@@ -1,0 +1,13 @@
+{
+  "name": "goal-team",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Cross-platform goal-driven multi-agent orchestration: bun hooks + goalctl CLI + skills (no MCP, no extension).",
+  "license": "MIT",
+  "scripts": {
+    "test": "bun test",
+    "check": "bun build --no-bundle hooks/goal-hook.mjs bin/goalctl.mjs lib/goal-store.mjs --outdir .check",
+    "doctor": "bun bin/goalctl.mjs doctor"
+  }
+}
