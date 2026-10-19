@@ -11,6 +11,21 @@ agent waves). See `docs/plans/2026-10-17-goal-team-plugin.md` for the full desig
 
 Requires [bun](https://bun.sh) ≥ 1.4.
 
+### As a marketplace plugin (recommended)
+
+```
+/plugin marketplace add dev66613/goal-team
+/plugin install goal-team@goal-team-marketplace
+```
+
+VS Code / Insiders: add the marketplace via `chat.plugins.marketplaces` → `"dev66613/goal-team"`,
+or **Chat: Install Plugin From Source** with `https://github.com/dev66613/goal-team`.
+
+Marketplace index: `.github/plugin/marketplace.json` (owner `dev66613`, one entry `goal-team`
+whose `source` is the repository root).
+
+### With the installer (writes absolute paths)
+
 ```powershell
 bun scripts/install.mjs
 ```

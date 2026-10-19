@@ -1,0 +1,25 @@
+{
+  "name": "goal-team-marketplace",
+  "owner": {
+    "name": "dev66613",
+    "url": "https://github.com/dev66613"
+  },
+  "metadata": {
+    "description": "Goal-driven multi-agent orchestration for GitHub Copilot CLI, VS Code and VS Code Insiders.",
+    "version": "0.2.0"
+  },
+  "plugins": [
+    {
+      "name": "goal-team",
+      "source": ".",
+      "description": "Goal-driven multi-agent orchestration: bun hooks, goalctl CLI, 12 specialist agents, parallel waves, independent verification, backlog.md CLI integration. No MCP, no extension.",
+      "version": "0.2.0",
+      "author": { "name": "dev66613", "url": "https://github.com/dev66613" },
+      "homepage": "https://github.com/dev66613/goal-team",
+      "repository": "https://github.com/dev66613/goal-team",
+      "license": "MIT",
+      "keywords": ["goal", "orchestration", "subagents", "hooks", "backlog", "copilot"],
+      "category": "workflow"
+    }
+  ]
+}

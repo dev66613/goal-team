@@ -1,6 +1,6 @@
 {
   "name": "goal-team",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "private": true,
   "description": "Cross-platform goal-driven multi-agent orchestration: bun hooks + goalctl CLI + skills (no MCP, no extension).",

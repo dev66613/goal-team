@@ -1,14 +1,14 @@
 {
   "version": 1,
   "hooks": {
-    "sessionStart": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "userPromptSubmitted": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "preCompact": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "agentStop": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "subagentStart": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "subagentStop": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "preToolUse": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "postToolUse": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
-    "notification": [{ "type": "command", "command": "bun \"hooks/goal-hook.mjs\"", "bash": "bun \"hooks/goal-hook.mjs\"", "powershell": "& bun \"hooks/goal-hook.mjs\"", "matcher": "agent_idle|agent_completed", "timeoutSec": 8 }]
+    "sessionStart": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "userPromptSubmitted": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "preCompact": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "agentStop": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "subagentStart": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "subagentStop": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "preToolUse": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "postToolUse": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "timeoutSec": 8 }],
+    "notification": [{ "type": "command", "command": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "bash": "bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "powershell": "& bun \"${PLUGIN_ROOT}/hooks/goal-hook.mjs\"", "matcher": "agent_idle|agent_completed", "timeoutSec": 8 }]
   }
 }

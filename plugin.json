@@ -1,7 +1,15 @@
 {
   "name": "goal-team",
-  "version": "0.1.0",
-  "description": "Goal-driven multi-agent orchestration with parallel waves, independent verification, and lessons.",
+  "version": "0.2.0",
+  "description": "Goal-driven multi-agent orchestration with parallel waves, independent verification, backlog.md CLI integration, and lessons.",
+  "author": {
+    "name": "dev66613",
+    "url": "https://github.com/dev66613"
+  },
+  "homepage": "https://github.com/dev66613/goal-team",
+  "repository": "https://github.com/dev66613/goal-team",
+  "license": "MIT",
+  "keywords": ["goal", "orchestration", "subagents", "hooks", "backlog", "copilot"],
   "skills": "skills/",
   "hooks": "hooks.json",
   "agents": "agents/"
