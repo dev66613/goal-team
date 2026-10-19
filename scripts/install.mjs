@@ -95,8 +95,17 @@ async function main() {
   // 2. Hook registration as a user-scope hook FILE: discovered by BOTH Copilot CLI
   //    and the VS Code (and Insiders) Copilot harness. Never inline in settings.json —
   //    inline hooks are schema-strict there and would reject the whole field.
+  //    If the plugin is ALSO installed, skip: two sources double-fire every event and
+  //    double-count drift.
+  const installedCopy = (await readdir(path.join(copilotHome, "installed-plugins")).catch(() => []))
+    .some((market) => existsSync(path.join(copilotHome, "installed-plugins", market, "goal-team", "hooks.json")));
   await mkdir(path.join(copilotHome, "hooks"), { recursive: true });
-  await writeIfChanged(path.join(copilotHome, "hooks", "goal-team.json"), JSON.stringify(hookFileDoc(), null, 2));
+  if (installedCopy) {
+    await rm(path.join(copilotHome, "hooks", "goal-team.json"), { force: true });
+    console.log("hooks: provided by the installed goal-team plugin — user hook file not written");
+  } else {
+    await writeIfChanged(path.join(copilotHome, "hooks", "goal-team.json"), JSON.stringify(hookFileDoc(), null, 2));
+  }
 
   // 2b. Skills into <COPILOT_HOME>/skills/ (built-in user skill location for VS Code,
   //     Insiders and Copilot CLI; chat.agentSkillsLocations is deprecated/ignored).
